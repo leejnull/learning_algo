@@ -38,3 +38,27 @@ TreeNode *search(BinarySearchTree *bst, int num) {
     return cur;
 }
 
+void insert(BinarySearchTree *bst, int num) {
+    if (bst->root == NULL) {
+        bst->root = newTreeNode(num);
+        return;
+    }
+    TreeNode *cur = bst->root, *pre = NULL;
+    while (cur != NULL) {
+        if (cur->val == num) {
+            return;
+        }
+        pre = cur;
+        if (cur->val < num) {
+            cur = cur->right;
+        } else {
+            cur = cur->left;
+        }
+    }
+    TreeNode *node = newTreeNode(num);
+    if (pre->val < num) {
+        pre->right = node;
+    } else {
+        pre->left = node;
+    }
+}
