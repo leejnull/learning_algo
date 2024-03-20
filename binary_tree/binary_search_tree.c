@@ -62,3 +62,43 @@ void insert(BinarySearchTree *bst, int num) {
         pre->left = node;
     }
 }
+
+void removeItem(BinarySearchTree *bst, int num) {
+    if (bst->root == NULL) {
+        return;
+    }
+    TreeNode *cur = bst->root, *pre = NULL;
+    while (cur != NULL) {
+        if (cur->val == num) {
+            break;
+        }
+        pre = cur;
+        if (cur->val < num) {
+            cur = cur->right;
+        } else {
+            cur = cur->left;
+        }
+    }
+    if (cur == NULL) {
+        return;
+    }
+    if (cur->left == NULL || cur->right == NULL) {
+        // 子节点数量0或1时
+        TreeNode *child = cur->left != NULL ? cur->left : cur->right;
+        if (pre->left == cur) {
+            pre->left = child;
+        } else {
+            pre->right = child;
+        }
+        free(cur);
+    } else {
+        // 子节点数量是2
+        TreeNode *tmp = cur->right;
+        while (tmp->left != NULL) {
+            tmp = tmp->left;
+        }
+        int tmpVal = tmp->val;
+        removeItem(bst, tmp->val);
+        cur->val = tmpVal;
+    }
+}
