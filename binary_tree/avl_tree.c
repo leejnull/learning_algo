@@ -20,6 +20,10 @@ TreeNode *newTreeNode(int val) {
     return node;
 }
 
+typedef struct AVLTree {
+    struct TreeNode *root;
+} AVLTree;
+
 int height(TreeNode *node) {
     if (node == NULL) {
         return -1;
@@ -98,3 +102,22 @@ TreeNode *rotate(TreeNode *node) {
     return node;
 }
 
+void insert(AVLTree *tree, int val) {
+    tree->root = insertHelper(tree->root, val);
+}
+
+TreeNode *insertHelper(TreeNode *node, int val) {
+    if (node == NULL) {
+        return newTreeNode(val);
+    }
+    if (val < node->val) {
+        node->left = insertHelper(node->left, val);
+    } else if (val > node->val) {
+        node->right = insertHelper(node->right, val);
+    } else {
+        return node;
+    }
+    updateHeight(node);
+    node = rotate(node);
+    return node;
+}
