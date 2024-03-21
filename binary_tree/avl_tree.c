@@ -20,6 +20,12 @@ TreeNode *newTreeNode(int val) {
     return node;
 }
 
+/*
+组织和存储大型数据，适用于高频查找、低频增删的场景。
+用于构建数据库中的索引系统。
+红黑树也是一种常见的平衡二叉搜索树。相较于 AVL 树，红黑树的平衡条件更宽松，
+插入与删除节点所需的旋转操作更少，节点增删操作的平均效率更高。
+*/
 typedef struct AVLTree {
     struct TreeNode *root;
 } AVLTree;
@@ -116,6 +122,48 @@ TreeNode *insertHelper(TreeNode *node, int val) {
         node->right = insertHelper(node->right, val);
     } else {
         return node;
+    }
+    updateHeight(node);
+    node = rotate(node);
+    return node;
+}
+
+void removeItem(AVLTree *tree, int val) {
+    tree->root = removeHelper(tree->root, val);
+}
+
+TreeNode *removeHelper(TreeNode *node, int val) {
+    TreeNode *child, *grandChild;
+    if (node == NULL) {
+        return newTreeNode(val);
+    }
+    if (val < node->val) {
+        node->left = removeHelper(node->left, val);
+    } else if (val > node->val) {
+        node->right = removeHelper(node->right, val);
+    } else {
+        if (node->left == NULL || node->right == NULL) {
+            child = node->left != NULL ? node->left : node->right;
+            // 子节点数量 0
+            if (child == NULL) {
+                return NULL;
+            } else {
+                // 子节点数量 1
+                node = child;
+            }
+        } else {
+            // 子节点数量 2
+            TreeNode *temp = node->right;
+            // 找右边的最小节点
+            while (temp->left != NULL) {
+                temp = temp->left;
+            }
+            int tempVal = temp->val;
+            // 删除右边的最小节点
+            node->right = removeHelper(node->right, tempVal);
+            // 右边的最小节点值放在当前删除节点的位置
+            node->val = tempVal;
+        }
     }
     updateHeight(node);
     node = rotate(node);
