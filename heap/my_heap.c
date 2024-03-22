@@ -33,6 +33,16 @@ int peek(MaxHeap *maxHeap) {
     return maxHeap->data[0];
 }
 
+bool isEmpty(MaxHeap *maxHeap) {
+    return maxHeap->size == 0;
+}
+
+void swap(MaxHeap *maxHeap, int i, int p) {
+    int temp = maxHeap->data[i];
+    maxHeap->data[i] = maxHeap->data[p];
+    maxHeap->data[p] = temp;
+}
+
 /*元素入堆*/
 void push(MaxHeap *maxHeap, int val) {
     if (maxHeap->size == MAX_CAPACITY) {
@@ -45,12 +55,6 @@ void push(MaxHeap *maxHeap, int val) {
     siftUp(maxHeap, maxHeap->size - 1);
 }
 
-void swap(MaxHeap *maxHeap, int i, int p) {
-    int temp = maxHeap->data[i];
-    maxHeap->data[i] = maxHeap->data[p];
-    maxHeap->data[p] = temp;
-}
-
 /*从节点 i 开始，从底至顶堆化*/
 void siftUp(MaxHeap *maxHeap, int i) {
     while (true) {
@@ -60,5 +64,35 @@ void siftUp(MaxHeap *maxHeap, int i) {
         }
         swap(maxHeap, i, p);
         i = p;
+    }
+}
+
+int pop(MaxHeap *maxHeap) {
+    if (isEmpty(maxHeap)) {
+        return INT64_MAX;
+    }
+    swap(maxHeap, 0, maxHeap->size-1);
+    int val = maxHeap->data[maxHeap->size-1];
+    maxHeap->size--;
+    siftDown(maxHeap, 0);
+    return val;
+}
+
+void siftDown(MaxHeap *maxHeap, int i) {
+    while (true) {
+        int l = left(maxHeap, i);
+        int r = right(maxHeap, i);
+        int max = i;
+        if (l < maxHeap->size && maxHeap->data[max] < maxHeap->data[l]) {
+            max = l;
+        }
+        if (r < maxHeap->size && maxHeap->data[max] < maxHeap->data[r]) {
+            max = r;
+        }
+        if (max == i) {
+            break;
+        }
+        swap(maxHeap, i, max);
+        i = max;
     }
 }
