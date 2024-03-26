@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define MAX_CAPACITY 64
 
@@ -13,6 +14,16 @@ MaxHeap *newMaxHeap() {
     MaxHeap *maxHeap = malloc(sizeof(MaxHeap));
     maxHeap->data = malloc(sizeof(int) * MAX_CAPACITY);
     maxHeap->size = 0;
+    return maxHeap;
+}
+
+MaxHeap *newMaxHeap(int nums[], int size) {
+    MaxHeap *maxHeap = malloc(sizeof(MaxHeap));
+    maxHeap->size = size;
+    memcpy(maxHeap->data, nums, sizeof(int) * size);
+    for (int i = parent(maxHeap, size - 1); i >= 0; i--) {
+        siftDown(maxHeap, i);
+    }
     return maxHeap;
 }
 
@@ -95,4 +106,40 @@ void siftDown(MaxHeap *maxHeap, int i) {
         swap(maxHeap, i, max);
         i = max;
     }
+}
+
+void pushMinHeap(MaxHeap *maxHeap, int val) {
+    push(maxHeap, -val);
+}
+
+int popMinHeap(MaxHeap *maxHeap) {
+    return -pop(maxHeap);
+}
+
+int peekMinHeap(MaxHeap *maxHeap) {
+    return -peek(maxHeap);
+} 
+
+int *getMinHeap(MaxHeap *maxHeap) {
+    int *res = malloc(maxHeap->size * sizeof(int));
+    for (int i = 0; i < maxHeap->size; i++) {
+        res[i] = -maxHeap->data[i];
+    }
+    return res;
+}
+
+int *topKHeap(int *nums, int sizeNums, int k) {
+    int *empty = malloc(0);
+    MaxHeap *maxHeap = newMaxHeap(empty, 0);
+    for (int i = 0; i < k; i++) {
+        pushMinHeap(maxHeap, nums[i]);
+    }
+    for (int i = k; i < sizeNums; i++) {
+        if (nums[i] > peekMinHeap(maxHeap)) {
+            popMinHeap(maxHeap);
+            pushMinHeap(maxHeap, nums[i]);
+        }
+    }
+    int *res = getMinHeap(maxHeap);
+    return res;
 }
