@@ -1,22 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-
-#define MAX_SIZE 64
-
-typedef struct {
-    
-} Vertex;
-
-typedef struct AdjListNode {
-    Vertex *vertex;
-    struct AdjListNode *next;
-} AdjListNode;
-
-typedef struct {
-    AdjListNode *heads[MAX_SIZE];
-    int size;
-} GraphAdjList;
+#include "graph_adjacency_list.h"
 
 GraphAdjList *newGraphAdjList() {
     GraphAdjList *graph = malloc(sizeof(GraphAdjList));
