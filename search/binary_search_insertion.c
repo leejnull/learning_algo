@@ -1,3 +1,5 @@
+#include "binary_search_insertion.h"
+
 int binarySearchInsertionSimple(int *nums, int numSize, int target) {
     int i = 0, j = numSize - 1;
     while (i <= j) {
