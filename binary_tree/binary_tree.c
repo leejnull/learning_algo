@@ -1,11 +1,4 @@
-#include <stdlib.h>
-
-typedef struct TreeNode {
-    int val;
-    int height;
-    struct TreeNode *left;
-    struct TreeNode *right;
-} TreeNode;
+#include "binary_tree.h"
 
 TreeNode *newTreeNode(int val) {
     TreeNode *node;
