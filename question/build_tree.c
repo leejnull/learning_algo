@@ -1,5 +1,4 @@
-#include "../binary_tree/binary_tree_dfs.h"
-#include "../utils/log.h"
+#include "build_tree.h"
 
 #define MAX_SIZE 128
 
@@ -58,21 +57,4 @@ TreeNode *buildTreePlus(int *preorder, int preorderSize, int *inorder, int inord
     TreeNode *root = dfsPlus(preorder, inorderMap, 0, 0, inorderSize-1, inorderSize);
     free(inorderMap);
     return root;
-}
-
-int main() {
-    int preorder[] = {3,9,2,1,7};
-    int inorder[] = {9,3,1,2,7};
-    TreeNode *node = buildTree(preorder, inorder, 5);
-    int *arr = malloc(sizeof(int) * 5);
-    int *size = malloc(sizeof(int));
-    preOrder(node, size, arr);
-    printIntArray(arr, 5);
-    *size = 0;
-    inOrder(node, size, arr);
-    printIntArray(arr, 5);
-    *size = 0;
-    postOrder(node, size, arr);
-    printIntArray(arr, 5);
-    return 1;
 }

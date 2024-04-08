@@ -1,3 +1,6 @@
+#ifndef BINARY_TREE_H
+#define BINARY_TREE_H
+
 #include <stdlib.h>
 
 typedef struct TreeNode {
@@ -8,3 +11,5 @@ typedef struct TreeNode {
 } TreeNode;
 
 TreeNode *newTreeNode(int val);
+
+#endif
