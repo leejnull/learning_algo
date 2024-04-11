@@ -32,7 +32,7 @@ void backtrack(int target, int *choices, int choicesSize, int start) {
     }
 }
 
-void subsetSumINaive(int *nums, int numSize, int target) {
+void subsetSumI(int *nums, int numSize, int target) {
     resSize = 0;
     int start = 0;
     backtrack(target, nums, numSize, start);
@@ -40,14 +40,18 @@ void subsetSumINaive(int *nums, int numSize, int target) {
 
 int main() {
     int nums[3] = {3, 4, 5};
-    subsetSumINaive(nums, 3, 9);
+    subsetSumI(nums, 3, 9);
     for (int i = 0; i < 9; i++) {
+        bool isNotEmpty = false;
         for (int j = 0; j < 3; j++) {
             if (res[i][j] > 0) {
                 printf("%d ", res[i][j]);
+                isNotEmpty = true;
             }
         }
-        printf("\n");
+        if (isNotEmpty) {
+            printf("\n");
+        }
     }
     return 0;
 }
