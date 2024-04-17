@@ -46,3 +46,51 @@ int minPathSumDFSMem(int grid[MAX_SIZE][MAX_SIZE], int mem[MAX_SIZE][MAX_SIZE], 
     mem[i][j] = min(up, left) != INT_MAX ? min(up, left) + grid[i][j] : INT_MAX;
     return mem[i][j];
 }
+
+/*最小路径和：动态规划*/
+int minPathSumDP(int grid[MAX_SIZE][MAX_SIZE], int n, int m) {
+    // 初始化 dp 表
+    int **dp = malloc(sizeof(int *) * n);
+    for (int i = 0; i < n; i++) {
+        dp[i] = malloc(sizeof(int) * m);
+    }
+    dp[0][0] = grid[0][0];
+    // 状态转移：首行
+    for (int j = 1; j < m; j++) {
+        dp[0][j] = dp[0][j - 1] + grid[0][j];
+    }
+    // 状态转移：首列
+    for (int i = 1; i < n; i++) {
+        dp[i][0] = dp[i - 1][0] + grid[i][0];
+    }
+    // 状态转移：其余行和列
+    for (int i = 1; i < n; i++) {
+        for (int j = 1; j < n; j++) {
+            dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+        }
+    }
+    int res = dp[n - 1][m - 1];
+    for (int i = 0; i < n; i++) {
+        free(dp[i]);
+    }
+    free(dp);
+    return res;
+}
+
+/*最小路径和：空间优化后的动态规划*/
+int minPathSumDPComp(int grid[MAX_SIZE][MAX_SIZE], int n, int m) {
+    int *dp = malloc(sizeof(int) * m);
+    dp[0] = grid[0][0];
+    for (int j = 1; j < m; j++) {
+        dp[j] = dp[j - 1] + grid[0][j];
+    }
+    for (int i = 1; i < n; i++) {
+        dp[0] = dp[0] + grid[i][0];
+        for (int j = 1; j < m; j++) {
+            dp[j] = min(dp[j - 1], dp[j]) + grid[i][j];
+        }
+    }
+    int res = dp[m - 1];
+    free(dp);
+    return res;
+}
