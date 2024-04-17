@@ -12,6 +12,7 @@ int min(int a, int b) {
     return a < b ? a : b;
 }
 
+/*最小路径和：暴力搜索*/
 int minPathSumDFS(int grid[MAX_SIZE][MAX_SIZE], int i, int j) {
     // 若为左上角单元格，则终止搜索
     if (i == 0 && j == 0) {
@@ -24,4 +25,24 @@ int minPathSumDFS(int grid[MAX_SIZE][MAX_SIZE], int i, int j) {
     int up = minPathSumDFS(grid, i - 1, j);
     int left = minPathSumDFS(grid, i, j - 1);
     return min(up, left) != INT_MAX ? min(up, left) + grid[i][j] : INT_MAX;
+}
+
+/*最小路径和：记忆化搜索*/
+int minPathSumDFSMem(int grid[MAX_SIZE][MAX_SIZE], int mem[MAX_SIZE][MAX_SIZE], int i, int j) {
+    // 若为左上角单元格，则终止搜索
+    if (i == 0 && j == 0) {
+        return grid[0][0];
+    }
+    // 若行列索引越界，则返回 +∞ 代价
+    if (i < 0 || j < 0) {
+        return INT_MAX;
+    }
+    // 若已有记录，则直接返回
+    if (mem[i][j] != -1) {
+        return mem[i][j];
+    }
+    int up = minPathSumDFS(grid, i - 1, j);
+    int left = minPathSumDFS(grid, i, j - 1);
+    mem[i][j] = min(up, left) != INT_MAX ? min(up, left) + grid[i][j] : INT_MAX;
+    return mem[i][j];
 }
