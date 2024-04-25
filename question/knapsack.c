@@ -56,7 +56,7 @@ int knapsackDP(int wgt[], int val[], int cap, int wgtSize) {
             if (wgt[i - 1] > c) {
                 dp[i][c] = dp[i - 1][c];
             } else {
-                dp[i][c] = max(dp[i - 1][c], dp[i - 1][c - wgt[i - c]] + val[i - 1]);
+                dp[i][c] = max(dp[i - 1][c], dp[i - 1][c - wgt[i - 1]] + val[i - 1]);
             }
         }
     }
@@ -64,5 +64,21 @@ int knapsackDP(int wgt[], int val[], int cap, int wgtSize) {
     for (int i = 0; i <= n; i++) {
         free(dp[i]);
     }
+    return res;
+}
+
+/* 0-1 背包：空间优化后的动态规划 */
+int knapsackDPComp(int wgt[], int val[], int cap, int wgtSize) {
+    int n = wgtSize;
+    int *dp = malloc(sizeof(int) * (cap + 1));
+    for (int i = 1; i <= n; i++) {
+        for (int c = cap; c >= 1; c--) {
+            if (wgt[i - 1] <= c) {
+                dp[c] = max(dp[c], dp[c - wgt[i - 1]] + val[i - 1]);
+            }
+        }
+    }
+    int res = dp[cap];
+    free(dp);
     return res;
 }
