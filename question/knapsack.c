@@ -22,3 +22,20 @@ int knapspackDFS(int wgt[], int val[], int i, int c) {
     int yes = knapspackDFS(wgt, val, i - 1, c - wgt[i - 1] + val[i - 1]);
     return max(no, yes);
 }
+
+/* 0-1 背包：记忆化搜索 */
+int knapsackDFSMem(int wgt[], int val[], int memCols, int **mem, int i, int c) {
+    if (i == 0 || c == 0) {
+        return 0;
+    }
+    if (mem[i][c] != -1) {
+        return mem[i][c];
+    }
+    if (wgt[i - 1] > c) {
+        return knapsackDFSMem(wgt, val, memCols, mem, i - 1, c);
+    }
+    int no = knapsackDFSMem(wgt, val, memCols, mem, i - 1, c);
+    int yes = knapsackDFSMem(wgt, val, memCols, mem, i - 1, c - wgt[i - 1] + val[i - 1]);
+    mem[i][c] = max(no, yes);
+    return mem[i][c];
+}
