@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 /**
  * 给定 n 个物品，第 i 个物品的重量为 wgt[i-1]、价值为 val[i-1]，和一个容量为 cap 的背包。
  * 每个物品只能选择一次，问在限定背包容量下能放入物品的最大价值。
@@ -38,4 +40,29 @@ int knapsackDFSMem(int wgt[], int val[], int memCols, int **mem, int i, int c) {
     int yes = knapsackDFSMem(wgt, val, memCols, mem, i - 1, c - wgt[i - 1] + val[i - 1]);
     mem[i][c] = max(no, yes);
     return mem[i][c];
+}
+
+/* 0-1 背包：动态规划 */
+int knapsackDP(int wgt[], int val[], int cap, int wgtSize) {
+    int n = wgtSize;
+    // 初始化dp表
+    int **dp = malloc(sizeof(int *) * (n + 1));
+    for (int i = 0; i <= n; i++) {
+        dp[i] = malloc(sizeof(int) * (cap + 1));
+    }
+    // 状态转移
+    for (int i = 1; i <= n; i++) {
+        for (int c = 1; c <= cap; c++) {
+            if (wgt[i - 1] > c) {
+                dp[i][c] = dp[i - 1][c];
+            } else {
+                dp[i][c] = max(dp[i - 1][c], dp[i - 1][c - wgt[i - c]] + val[i - 1]);
+            }
+        }
+    }
+    int res = dp[n][cap];
+    for (int i = 0; i <= n; i++) {
+        free(dp[i]);
+    }
+    return res;
 }
