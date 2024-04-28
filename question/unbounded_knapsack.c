@@ -35,3 +35,21 @@ int unboundedKnapsackDP(int wgt[], int val[], int cap, int wgtSize) {
     free(dp);
     return res;
 }
+
+/* 完全背包：空间优化后的动态规划 */
+int unboundedKnapsackDPComp(int wgt[], int val[], int cap, int wgtSize) {
+    int n = wgtSize;
+    int *dp = malloc(sizeof(int) * (cap + 1));
+    for (int i = 1; i <= n; i++) {
+        for (int c = 1; c <= cap; c++) {
+            if (wgt[i - 1] > c) {
+                dp[c] = dp[c]
+            } else {
+                dp[c] = max(dp[c], dp[c - wgt[i - 1]] + val[i - 1]);
+            }
+        }
+    }
+    int res = dp[cap];
+    free(dp);
+    return res;
+}
